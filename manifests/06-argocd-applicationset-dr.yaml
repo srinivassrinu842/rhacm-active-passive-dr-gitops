@@ -14,15 +14,16 @@ spec:
         requeueAfterSeconds: 30
   template:
     metadata:
-      name: '{{name}}-guestbook'
+      name: '{{name}}-bgd'
     spec:
       project: default
       source:
-        repoURL: https://github.com/argoproj/argocd-example-apps.git
-        targetRevision: HEAD
-        path: guestbook
+        # Red Hat Official OpenShift-Native Sample App (Runs non-root on port 8080)
+        repoURL: https://github.com/openshift-gitops-samples/bgd-app.git
+        targetRevision: main
+        path: .
       destination:
-        namespace: guestbook
+        namespace: bgd
         server: '{{server}}'
       syncPolicy:
         automated:
