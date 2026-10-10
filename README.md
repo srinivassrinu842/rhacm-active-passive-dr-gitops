@@ -150,3 +150,19 @@ To achieve **100% automated failover without manual re-importing**, this archite
 * `manifests/05-gitops-integration.yaml` - OpenShift GitOps ManagedClusterSetBinding, Placement, and GitOpsCluster CRs
 * `scripts/failover.sh` - Shell script automation for failover execution
 * `ansible/failover-playbook.yml` - Ansible Playbook for DR failover orchestration
+
+---
+
+## 🔗 Official Red Hat Documentation & Reference Links
+
+1. 📖 **Automatically Reconnecting Managed Clusters:**
+   [A guide to automatically reconnecting managed clusters when restoring a Red Hat Advanced Cluster Management for Kubernetes 2.7+ hub cluster](https://www.redhat.com/en/blog/a-guide-to-automatically-reconnecting-managed-clusters-when-restoring-a-red-hat-advanced-cluster-management-for-kubernetes-2.7-hub-cluster)
+
+2. 📖 **Active/Passive RHACM Hub Setup:**
+   [How to move from standalone RHACM to an Active/Passive setup](https://www.redhat.com/en/blog/how-to-move-from-standalone-rhacm-to-an-active/passive-setup)
+
+3. 📖 **ACM Backup & Restore with OADP & MinIO/S3:**
+   [How to backup and restore ACM with OADP and MinIO](https://www.redhat.com/en/blog/how-to-backup-and-restore-acm-with-oadp-and-minio)
+
+4. 📖 **Argo CD & GitOps Disaster Recovery Strategy:**
+   [Argo CD disaster recovery strategy using Red Hat Advanced Cluster Management and OADP](https://www.redhat.com/en/blog/argo-cd-disaster-recovery-strategy-using-red-hat-advanced-cluster-management-and-oadp)
