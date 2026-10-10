@@ -1,0 +1,12 @@
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Restore
+metadata:
+  name: restore-passive-sync
+  namespace: open-cluster-management-backup
+spec:
+  syncRestoreWithNewBackups: true
+  restoreSyncInterval: 10m              # Sync from S3 every 10 minutes
+  cleanupBeforeRestore: None
+  veleroResourcesBackupName: latest
+  veleroCredentialsBackupName: latest
+  veleroManagedClustersBackupName: skip  # Keeps passive hub in standby mode

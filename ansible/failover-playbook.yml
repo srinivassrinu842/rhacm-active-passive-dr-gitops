@@ -1,0 +1,55 @@
+---
+- name: Automate RHACM Hub Failover to ocp21
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: 1. Stop BackupSchedule on ocp20
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        context: ocp20
+        state: absent
+        api_version: cluster.open-cluster-management.io/v1beta1
+        kind: BackupSchedule
+        name: schedule-acm
+        namespace: open-cluster-management-backup
+      ignore_errors: true
+
+    - name: 2. Remove Passive Sync Restore on ocp21
+      kubernetes.core.k8s:
+        context: ocp21
+        state: absent
+        api_version: cluster.open-cluster-management.io/v1beta1
+        kind: Restore
+        name: restore-passive-sync
+        namespace: open-cluster-management-backup
+
+    - name: 3. Trigger Activation Restore on ocp21
+      kubernetes.core.k8s:
+        context: ocp21
+        state: present
+        definition: "{{ lookup('file', '../manifests/04-restore-activate.yaml') | from_yaml }}"
+
+    - name: 4. Wait for Activation Restore to complete
+      kubernetes.core.k8s_info:
+        context: ocp21
+        api_version: cluster.open-cluster-management.io/v1beta1
+        kind: Restore
+        name: restore-acm-activate
+        namespace: open-cluster-management-backup
+      register: restore_status
+      until: restore_status.resources[0].status.phase == 'Finished'
+      retries: 30
+      delay: 10
+
+    - name: 5. Enable BackupSchedule on ocp21
+      kubernetes.core.k8s:
+        context: ocp21
+        state: present
+        definition: "{{ lookup('file', '../manifests/02-backup-schedule-acm.yaml') | from_yaml }}"
+
+    - name: 6. Enable Passive Sync Restore on ocp20
+      kubernetes.core.k8s:
+        context: ocp20
+        state: present
+        definition: "{{ lookup('file', '../manifests/03-restore-passive-sync.yaml') | from_yaml }}"
+      ignore_errors: true
